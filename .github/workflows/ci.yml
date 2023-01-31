@@ -28,4 +28,4 @@ jobs:
         with:
           context: "{{defaultContext}}:server"
           push: true
-          tags: fmalmo/rust-gitops:latest, fmalmo/rust-gitops:sha-${{ steps.commit.outputs.short }}
+          tags: fmalmo/rust-gitops:latest,fmalmo/rust-gitops:sha-${{ steps.commit.outputs.short }}
