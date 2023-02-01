@@ -37,19 +37,18 @@ spec:
   selector:
     app: {{ .Chart.Name }}
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
   namespace: default
-  name: app-ingress
+  name: app-ingress-route
 spec:
-  rules:
-  - http:
-      paths:
-      - path: /hello
-        pathType: Prefix
-        backend:
-          service:
-            name: {{ .Chart.Name }}
-            port:
-              name: web
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`20.166.201.127`) && Path("/hello")
+      kind: Rule
+      services:
+        - name: {{ .Chart.Name }}
+          kind: Service
+          namespace: default
