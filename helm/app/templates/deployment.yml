@@ -40,7 +40,6 @@ kind: Ingress
 metadata:
   name: app-ingress
   namespace: default
-
 spec:
   defaultBackend:
     service:
