@@ -35,16 +35,29 @@ spec:
   selector:
     app: "{{ .Chart.Name }}"
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
-  name: app-ingress
   namespace: default
-  annotations:
-    kubernetes.io/ingress.class: traefik
+  name: app-ingress-route
 spec:
-  defaultBackend:
-    service:
-      name: "{{ .Chart.Name }}"
-      port:
-        number: 80
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`20.166.201.127`) && PathPrefix("/rs")
+      kind: Rule
+      middlewares:
+        - name: rs-stripprefix
+      services:
+        - name: "{{ .Chart.Name }}"
+          port: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  namespace: default
+  name: rs-stripprefix
+spec:
+  stripPrefix:
+    prefixes:
+      - /rs
