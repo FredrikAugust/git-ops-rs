@@ -1,41 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}
+  name: { { .Chart.Name } }
   namespace: default
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    app: "{{ .Chart.Name }}"
 spec:
   selector:
     matchLabels:
-      app: {{ .Chart.Name }}
+      app: { { .Chart.Name } }
   replicas: 1
   template:
     metadata:
       labels:
-        app: {{ .Chart.Name }}
+        app: { { .Chart.Name } }
     spec:
       containers:
-      - name: {{ .Chart.Name }}
-        image: "{{ .Values.image }}"
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 80
+        - name: { { .Chart.Name } }
+          image: "{{ .Values.image }}"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
 metadata:
   namespace: default
-  name: {{ .Chart.Name }}-service
-  labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+  name: { { .Chart.Name } }
 spec:
   ports:
-  - name: http
-    port: 80
-    targetPort: 80
+    - name: http
+      port: 80
+      targetPort: 80
   selector:
-    app: {{ .Chart.Name }}
+    app: { { .Chart.Name } }
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -51,11 +49,8 @@ spec:
       middlewares:
         - name: rs-stripprefix
       services:
-        - name: {{ .Chart.Name }}-service
-          kind: Service
-          namespace: default
+        - name: { { .Chart.Name } }
           port: 80
-          scheme: http
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
