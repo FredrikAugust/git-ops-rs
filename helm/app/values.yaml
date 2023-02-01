@@ -1,4 +1,4 @@
-image: fmalmo/rust-gitops:latest
+image: fmalmo/rust-gitops:sha-cb1b644
 
 service:
   internalPort: 8080
