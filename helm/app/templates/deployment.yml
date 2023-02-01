@@ -46,11 +46,23 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`20.166.201.127`) && Path("/hello")
+    - match: Host(`20.166.201.127`) && PathPrefix("/rs")
       kind: Rule
+      middlewares:
+        - name: rs-stripprefix
       services:
         - name: {{ .Chart.Name }}-service
           kind: Service
           namespace: default
           port: 80
           scheme: http
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  namespace: default
+  name: rs-stripprefix
+spec:
+  stripPrefix:
+    prefixes:
+      - /rs
