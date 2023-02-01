@@ -10,4 +10,4 @@ service:
   spec:
     loadBalancerIP: 20.166.201.127
   annotations:
-    "service.beta.kubernetes.io/azure-load-balancer-resource-group": "MC_federicos-cluster_federicos-test-cluster_northeurope"
+    "service.beta.kubernetes.io/azure-load-balancer-resource-group": "mc_federicos-cluster_federicos-test-cluster_northeurope"
