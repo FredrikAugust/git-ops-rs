@@ -53,4 +53,4 @@ spec:
         - name: {{ .Chart.Name }}
           kind: Service
           namespace: default
-          port: web
+          port: 80
