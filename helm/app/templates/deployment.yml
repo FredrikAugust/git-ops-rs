@@ -43,6 +43,6 @@ metadata:
 spec:
   defaultBackend:
     service:
-      name: "{{ .Char.Name }}"
+      name: "{{ .Chart.Name }}"
       port:
         number: 80
