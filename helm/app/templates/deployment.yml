@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Chart.Name }}
-  namespace: "{{ .Release.Namespace }}"
+  namespace: default
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
 spec:
@@ -21,20 +21,19 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
-          name: web
 ---
 apiVersion: v1
 kind: Service
 metadata:
   namespace: default
-  name: {{ .Chart.Name }}
+  name: {{ .Chart.Name }}-service
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
 spec:
   ports:
-  - name: web
+  - name: http
     port: 80
-    targetPort: web
+    targetPort: 80
   selector:
     app: {{ .Chart.Name }}
 ---
@@ -50,7 +49,8 @@ spec:
     - match: Host(`20.166.201.127`) && Path("/hello")
       kind: Rule
       services:
-        - name: {{ .Chart.Name }}
+        - name: {{ .Chart.Name }}-service
           kind: Service
           namespace: default
           port: 80
+          scheme: http
